@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Due Soon: homework tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap"
+        rel="stylesheet">
+    <link rel="manifest" href="manifest.webmanifest">
+    <meta name="theme-color" content="#1b2440">
+    <link rel="icon" href="icon-192.png" type="image/png">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <canvas id="bg" aria-hidden="true"></canvas>
+    <main>
+        <header class="top"><img src="icon-192.png" alt="" width="44" height="44">
+            <h1>Due Soon</h1>
+        </header>
+        <p class="sub">Add it. Do it. Done.</p>
+        <div id="streak" class="streak"></div>
+
+        <nav class="tabs" aria-label="Sections">
+            <button data-tab="tasks" aria-selected="true">Tasks</button>
+            <button data-tab="study" aria-selected="false">Study</button>
+            <button data-tab="tools" aria-selected="false">Tools</button>
+            <button data-tab="settings" aria-selected="false">Settings</button>
+        </nav>
+
+        <div data-p="tasks" class="panel">
+            <div id="banner" class="banner" hidden></div>
+            <div id="prog" class="prog" hidden></div>
+            <form id="f">
+                <div class="full"><label for="title">What's due?</label><input id="title" required maxlength="80"
+                        placeholder="Read chapter 3"></div>
+                <div><label for="subj">Subject</label><input id="subj" maxlength="30" placeholder="English"></div>
+                <div><label for="due">Due date</label><input id="due" type="date" required></div>
+                <div><label class="chk"><input id="pri" type="checkbox">High priority</label></div>
+                <div><label for="rep">Repeats</label><select id="rep">
+                        <option value="none">Never</option>
+                        <option value="daily">Daily</option>
+                        <option value="weekly">Weekly</option>
+                    </select></div>
+                <div><label for="mins">Estimate (minutes)</label><input id="mins" type="number" min="0" max="600"></div>
+                <div><label for="notes">Notes or link</label><input id="notes" maxlength="200"></div>
+                <div><label class="chk"><input id="tst" type="checkbox">This is a test (put topics in Notes)</label>
+                </div>
+                <div class="btns"><button id="go" class="add" type="submit">Add assignment</button><button id="cancel"
+                        class="cancel" type="button" hidden>Cancel</button></div>
+            </form>
+            <div class="bar2"><input id="q" placeholder="Search assignments" aria-label="Search assignments"><select
+                    id="flt" aria-label="Filter by subject">
+                    <option value="">All subjects</option>
+                </select><button id="pick" class="ghost" type="button">Pick for me</button></div>
+            <p id="total" class="m"></p>
+            <div id="list"></div>
+        </div>
+
+        <div data-p="study" class="panel" hidden>
+            <section class="helper">
+                <h2>Study helper</h2>
+                <p class="sub">Search any topic. Get a quick explanation plus free textbooks and lessons.</p>
+                <form id="hf" class="hform">
+                    <input id="hq" required maxlength="80"
+                        placeholder="Pythagorean theorem, photosynthesis, causes of WWI" aria-label="Topic">
+                    <button class="add" type="submit">Search</button>
+                </form>
+                <div id="hr"></div>
+            </section>
+        </div>
+
+        <div data-p="tools" class="panel" hidden>
+            <section id="tools">
+                <h2>Tools</h2>
+                <details>
+                    <summary>Weekly summary</summary>
+                    <div id="sum" class="m"></div>
+                </details>
+                <details>
+                    <summary>Calendar</summary>
+                    <div id="cal"></div>
+                </details>
+                <details>
+                    <summary>Study timer</summary>
+                    <div class="trow"><select id="tsub" aria-label="Subject"></select><input id="tmin" type="number"
+                            min="1" max="120" value="25" aria-label="Minutes"><button id="tgo" class="ghost"
+                            type="button">Start</button></div>
+                    <div id="tdisp" class="big">25:00</div>
+                    <div id="tlog" class="m"></div>
+                </details>
+                <details>
+                    <summary>Grade tracker</summary>
+                    <form id="gf" class="trow"><input id="gc" placeholder="Class" required maxlength="30"><input id="gs"
+                            type="number" min="0" max="100" step="0.1" placeholder="Score %" required><button
+                            class="ghost" type="submit">Add</button></form>
+                    <div id="gl"></div>
+                </details>
+                <details>
+                    <summary>Flashcards</summary>
+                    <form id="kf" class="trow"><input id="kq" placeholder="Front" required maxlength="120"><input
+                            id="ka" placeholder="Back" required maxlength="200"><button class="ghost"
+                            type="submit">Add</button></form>
+                    <div id="kc"></div>
+                </details>
+                <details id="pd">
+                    <summary>Test study plan</summary>
+                    <div id="plan" class="m">Add a test with topics in Notes, separated by commas. Then press Study plan
+                        on it.</div>
+                </details>
+            </section>
+        </div>
+
+        <div data-p="settings" class="panel" hidden>
+            <h2>Settings</h2>
+            <div class="set"><label for="themeSel">Theme</label><select id="themeSel">
+                    <option value="auto">Auto</option>
+                    <option value="light">Light</option>
+                    <option value="dark">Dark</option>
+                    <option value="midnight">Midnight</option>
+                    <option value="forest">Forest</option>
+                    <option value="sunset">Sunset</option>
+                    <option value="red">Red night</option>
+                </select></div>
+            <label class="chk"><input id="anim" type="checkbox" checked>Animated background</label>
+            <div class="set"><button id="alert" class="ghost" type="button">Alerts: off</button></div>
+            <h2>Your data</h2>
+            <div class="set"><button id="exp" class="ghost" type="button">Export backup</button><label
+                    class="ghost file">Import backup<input id="imp" type="file" accept=".json" hidden></label><button
+                    id="shr" class="ghost" type="button">Share link</button><button id="clr" class="ghost"
+                    type="button">Clear completed</button></div>
+            <h2>Keyboard shortcuts</h2>
+            <p class="m">N new assignment, / search, S study search, P pick for me, 1 to 4 switch tabs.</p>
+        </div>
+    </main>
+    <div id="toast" class="toast" role="status" hidden></div>
+    <div class="wm">Kavish Chanda</div>
+    <canvas id="cf" aria-hidden="true"></canvas>
+    <script src="script.js"></script>
+</body>
+
+</html>

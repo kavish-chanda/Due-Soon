@@ -140,10 +140,49 @@ select {
     width: 100%;
     font: inherit;
     color: var(--ink);
-    background: var(--bg);
+    background: var(--surface);
     border: 1px solid var(--line);
-    border-radius: 8px;
-    padding: 10px
+    border-radius: 10px;
+    padding: 11px 12px;
+    transition: border-color .16s ease, box-shadow .16s ease, background-color .16s ease
+}
+
+input:not([type=checkbox]):not([type=radio]):not([type=file]):hover,
+textarea:hover {
+    border-color: var(--muted)
+}
+
+input:not([type=checkbox]):not([type=radio]):not([type=file]):focus,
+textarea:focus {
+    border-color: var(--soon);
+    background: var(--surface);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--soon) 17%, transparent);
+    outline: none
+}
+
+input:not([type=checkbox]):not([type=radio]):not([type=file]):disabled,
+textarea:disabled {
+    opacity: .65;
+    cursor: not-allowed
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: var(--muted);
+    opacity: .75
+}
+
+textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 12px 14px;
+    font: inherit;
+    color: var(--ink);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    line-height: 1.55;
+    transition: border-color .16s ease, box-shadow .16s ease, background-color .16s ease
 }
 
 input[type=checkbox] {
@@ -203,9 +242,15 @@ option {
 
 input:focus-visible,
 select:focus-visible,
+textarea:focus-visible,
 button:focus-visible {
     outline: 3px solid var(--soon);
     outline-offset: 2px
+}
+
+input:not([type=checkbox]):not([type=radio]):focus-visible,
+textarea:focus-visible {
+    outline: none
 }
 
 input[type=checkbox]:focus-visible {
@@ -343,6 +388,75 @@ li {
     color: var(--done)
 }
 
+.has-steps .task-steps {
+    grid-column: 1/-1;
+    width: 100%;
+    padding: 10px 12px;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 10px
+}
+
+.task-steps-heading {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 6px;
+    font-size: .85rem
+}
+
+.task-steps-bar {
+    height: 5px;
+    margin-bottom: 8px;
+    overflow: hidden;
+    background: var(--line);
+    border-radius: 99px
+}
+
+.task-steps-bar i {
+    display: block;
+    height: 100%;
+    background: var(--soon);
+    border-radius: inherit;
+    transition: width .2s ease
+}
+
+.task-steps ul {
+    gap: 4px
+}
+
+.task-steps ul li {
+    display: block;
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    animation: none
+}
+
+.task-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+    margin: 0;
+    color: var(--ink);
+    font-size: .9rem;
+    cursor: pointer
+}
+
+.task-step input[type=checkbox] {
+    margin-top: 2px
+}
+
+.task-step.is-done span {
+    color: var(--muted);
+    text-decoration: line-through
+}
+
+.has-steps .acts {
+    grid-column: 1/-1
+}
+
 .acts {
     display: flex;
     gap: 6px;
@@ -389,15 +503,472 @@ li {
     padding-top: 6px
 }
 
+.study-test {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px;
+    margin-bottom: 8px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px
+}
+
+.study-test h3 {
+    margin: 0;
+    font-size: 1rem
+}
+
+.study-test p {
+    margin: 3px 0 0
+}
+
+.lesson {
+    margin: 18px 0 28px;
+    padding: 16px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px
+}
+
+.lesson h2 {
+    margin-top: 0
+}
+
+.lesson-explanation,
+.lesson-stage {
+    margin-top: 12px;
+    padding: 14px;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 12px
+}
+
+.lesson-explanation h3,
+.lesson-stage h3 {
+    margin: 0 0 6px
+}
+
+.lesson-explanation p,
+.lesson-stage>p {
+    margin: 0 0 10px
+}
+
+.lesson-quiz {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+    padding: 0;
+    margin: 10px 0 0;
+    background: none;
+    border: 0
+}
+
+.lesson-question {
+    min-width: 0;
+    margin: 0;
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+    border-radius: 10px
+}
+
+.lesson-question legend {
+    padding: 0 4px;
+    font-weight: 600
+}
+
+.lesson-question>p {
+    margin: 4px 0 8px
+}
+
+.lesson-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 4px;
+    margin: 6px 0;
+    color: var(--ink);
+    cursor: pointer
+}
+
+input[type=radio] {
+    appearance: auto;
+    width: auto;
+    flex: 0 0 auto;
+    margin: 4px 5px 0 0;
+    padding: 0;
+    accent-color: var(--soon)
+}
+
+.lesson-feedback,
+.lesson-passed,
+.lesson-retry {
+    margin-top: 10px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: var(--surface)
+}
+
+.lesson-passed {
+    border: 1px solid var(--soon)
+}
+
+.lesson-retry {
+    border: 1px solid var(--late)
+}
+
+.lesson-review {
+    display: grid;
+    gap: 8px;
+    margin: 8px 0 14px;
+    padding-left: 22px
+}
+
+.lesson-review li {
+    display: list-item;
+    padding: 0;
+    border: 0;
+    background: none;
+    animation: none
+}
+
+.lesson-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    overflow-y: auto;
+    background: var(--bg);
+    color: var(--ink)
+}
+
+.lesson-overlay[hidden] {
+    display: none
+}
+
+body.lesson-open {
+    overflow: hidden
+}
+
+.lesson-shell {
+    width: min(900px, 100%);
+    min-height: 100vh;
+    min-height: 100dvh;
+    margin: 0 auto;
+    padding: 24px clamp(18px, 5vw, 56px) 48px
+}
+
+.lesson-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 18px
+}
+
+.lesson-header h1 {
+    font-size: clamp(1.35rem, 4vw, 2rem);
+    line-height: 1.15
+}
+
+.eyebrow {
+    margin: 0 0 5px;
+    color: var(--muted);
+    font-size: .75rem;
+    font-weight: 800;
+    letter-spacing: .12em
+}
+
+.lesson-progress {
+    height: 6px;
+    margin-bottom: 28px;
+    overflow: hidden;
+    background: var(--line);
+    border-radius: 99px
+}
+
+.lesson-progress>div {
+    width: 0;
+    height: 100%;
+    background: var(--soon);
+    border-radius: inherit;
+    transition: width .25s ease
+}
+
+.lesson-content {
+    width: min(100%, 720px);
+    margin: 0 auto;
+    animation: rise .2s ease-out
+}
+
+.lesson-content>h2 {
+    margin: 0 0 18px;
+    font-size: clamp(1.5rem, 4vw, 2.2rem)
+}
+
+.slide-reading {
+    font-size: clamp(1.05rem, 2vw, 1.2rem);
+    line-height: 1.8
+}
+
+.notes-label {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 24px 0 6px;
+    color: var(--ink);
+    font-size: .9rem;
+    font-weight: 600
+}
+
+.notes-label span {
+    color: var(--muted);
+    font-size: .78rem;
+    font-weight: 400
+}
+
+#slideNotes {
+    width: 100%;
+    min-height: 76px;
+    resize: vertical;
+    padding: 10px 12px;
+    font: inherit;
+    color: var(--ink);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px
+}
+
+.slide-check,
+.lesson-content .lesson-quiz {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+    margin: 24px 0 0;
+    padding: 16px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px
+}
+
+.slide-check fieldset,
+.lesson-content .lesson-question {
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0
+}
+
+.slide-check legend,
+.lesson-content .lesson-question legend {
+    font-size: 1.05rem;
+    font-weight: 700
+}
+
+.slide-check fieldset>p,
+.lesson-content .lesson-question>p {
+    margin: 8px 0 14px;
+    line-height: 1.65
+}
+
+.lesson-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    margin: 7px 0;
+    color: var(--ink);
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    cursor: pointer
+}
+
+.lesson-option input[type=radio] {
+    width: 18px;
+    height: 18px;
+    flex: 0 0 18px;
+    margin: 0;
+    accent-color: var(--soon)
+}
+
+.lesson-option:has(input:checked) {
+    border-color: var(--soon);
+    background: color-mix(in srgb, var(--soon) 10%, var(--bg))
+}
+
+.slide-feedback {
+    margin: 0;
+    font-weight: 600
+}
+
+.slide-feedback.correct {
+    color: var(--soon)
+}
+
+.slide-feedback.incorrect {
+    color: var(--late)
+}
+
+.lesson-controls {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 24px
+}
+
+.lesson-controls .add {
+    flex: 0 1 240px
+}
+
+.lesson-controls button:disabled {
+    opacity: .5;
+    cursor: not-allowed
+}
+
+.quiz-preferences {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin: 22px 0
+}
+
+.quiz-preferences label {
+    color: var(--ink);
+    font-weight: 600
+}
+
+.quiz-preferences label span {
+    display: block;
+    color: var(--muted);
+    font-size: .78rem;
+    font-weight: 400
+}
+
+.quiz-preferences select,
+.quiz-preferences input {
+    width: 100%;
+    margin-top: 6px
+}
+
+.study-context-prompt {
+    margin: 18px 0;
+    padding: 18px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px
+}
+
+.study-context-prompt h3 {
+    margin: 4px 0
+}
+
+.study-context-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 14px;
+    margin-top: 16px
+}
+
+.study-context-form label {
+    color: var(--ink);
+    font-weight: 600
+}
+
+.study-context-form input {
+    width: 100%;
+    margin-top: 6px
+}
+
+.study-context-form .lesson-controls {
+    grid-column: 1 / -1;
+    justify-content: flex-start;
+    margin-top: 0
+}
+
+.study-context-note {
+    margin: 14px 0 4px;
+    padding: 12px;
+    color: var(--muted);
+    background: var(--surface);
+    border-radius: 10px
+}
+
+.study-context-link {
+    margin: 4px 0 14px
+}
+
+.quiz-clock,
+.quiz-score {
+    font-size: 1.35rem;
+    font-weight: 800
+}
+
+.lesson-content .add {
+    width: auto
+}
+
+.study-plan-result {
+    margin-top: 12px;
+    padding: 12px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px
+}
+
+.study-plan-result p {
+    margin: 0 0 8px
+}
+
+.study-plan-list {
+    display: grid;
+    gap: 6px;
+    margin: 0;
+    padding-left: 24px
+}
+
+.study-plan-list li {
+    display: list-item;
+    padding: 0;
+    background: none;
+    border: 0;
+    animation: none
+}
+
+@media (max-width:420px) {
+    .study-test {
+        align-items: flex-start;
+        flex-direction: column
+    }
+
+    .hform input {
+        flex-basis: 100%;
+        min-width: 0
+    }
+
+    .lesson-shell {
+        padding: 16px 16px 32px
+    }
+
+    .quiz-preferences {
+        grid-template-columns: 1fr
+    }
+
+    .lesson-header .ghost {
+        flex: none
+    }
+}
+
 .hform {
     display: flex;
+    flex-wrap: wrap;
     gap: 8px;
     padding: 10px;
     margin-bottom: 14px
 }
 
 .hform input {
-    flex: 1
+    flex: 1;
+    min-width: 180px
 }
 
 .hform .add {
@@ -518,6 +1089,18 @@ li {
     border-color: var(--soon)
 }
 
+.date-shortcuts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 6px
+}
+
+.date-shortcuts .ghost {
+    padding: 4px 8px;
+    font-size: .78rem
+}
+
 .streak {
     color: var(--muted);
     margin-bottom: 12px;
@@ -539,6 +1122,10 @@ li {
 .bar2 select {
     flex: 1;
     min-width: 120px
+}
+
+.bar2 #ftype {
+    min-width: 130px
 }
 
 #cf {
@@ -628,6 +1215,217 @@ details>form {
     font-size: 2.2rem;
     font-weight: 800;
     margin: 8px 0
+}
+
+.quick-notes-label {
+    margin: 10px 0 6px
+}
+
+#quickNotes {
+    width: 100%;
+    min-height: 120px;
+    resize: vertical;
+    line-height: 1.55
+}
+
+.quick-notes-status {
+    margin: 6px 0 0
+}
+
+.tool-help {
+    margin: 8px 0
+}
+
+.tool-form {
+    display: block;
+    padding: 0;
+    margin: 10px 0;
+    background: none;
+    border: 0
+}
+
+.tool-form>label {
+    margin-bottom: 6px
+}
+
+.tool-form textarea {
+    width: 100%;
+    min-height: 150px;
+    resize: vertical;
+    line-height: 1.55
+}
+
+.tool-result {
+    min-height: 1.5em;
+    margin: 8px 0 2px;
+    padding: 10px 12px;
+    overflow-wrap: anywhere;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    font-weight: 600
+}
+
+.calculator-keys {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 7px;
+    margin-top: 10px
+}
+
+.calc-key {
+    min-height: 42px;
+    padding: 8px;
+    font-size: 1rem
+}
+
+.calc-operator {
+    color: var(--soon);
+    font-weight: 700
+}
+
+.calc-equals {
+    grid-column: span 3;
+    background: var(--ink);
+    color: var(--bg);
+    font-weight: 700
+}
+
+.calculator-answer {
+    width: 100%;
+    min-height: 52px;
+    color: var(--ink);
+    text-align: left;
+    cursor: pointer
+}
+
+.calculator-answer:disabled {
+    cursor: default;
+    opacity: .8
+}
+
+.calculator-answer:not(:disabled):hover {
+    border-color: var(--soon)
+}
+
+.tool-error {
+    border-color: var(--late);
+    color: var(--late)
+}
+
+.writing-controls {
+    justify-content: space-between;
+    margin-top: 8px
+}
+
+.writing-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+    margin: 12px 0;
+    color: var(--muted);
+    font-size: .9rem
+}
+
+.writing-stats b {
+    color: var(--ink)
+}
+
+.writing-issue-heading {
+    margin: 12px 0 8px
+}
+
+.writing-issues {
+    gap: 8px
+}
+
+.writing-issues li {
+    display: block;
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--soon);
+    border-radius: 9px;
+    background: var(--surface)
+}
+
+.writing-issues p {
+    margin: 3px 0 0;
+    color: var(--muted);
+    font-size: .9rem
+}
+
+.writing-issues del {
+    color: var(--late);
+    text-decoration-thickness: 2px
+}
+
+.writing-issues ins {
+    color: var(--soon);
+    font-weight: 600;
+    text-decoration: none
+}
+
+.writing-quote {
+    color: var(--muted);
+    font-size: .9rem
+}
+
+.writing-clear {
+    padding: 12px;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    background: var(--bg)
+}
+
+.corrected-draft {
+    margin: 14px 0;
+    padding: 12px;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 12px
+}
+
+.corrected-draft h3 {
+    margin: 0 0 4px
+}
+
+.corrected-draft>p {
+    margin: 0 0 8px
+}
+
+.corrected-draft textarea {
+    width: 100%;
+    min-height: 150px;
+    resize: vertical;
+    line-height: 1.55
+}
+
+.corrected-draft-actions {
+    margin-top: 8px
+}
+
+.practice-progress {
+    margin: 2px 0 8px
+}
+
+.practice-actions {
+    margin-bottom: 8px
+}
+
+.practice-result {
+    padding: 14px;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 12px
+}
+
+.practice-result h3 {
+    margin: 0 0 4px
+}
+
+.practice-result p {
+    margin: 0 0 12px
 }
 
 .calh {
@@ -773,22 +1571,29 @@ details>form {
 }
 
 .tabs {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 6px;
-    margin-bottom: 16px;
-    overflow-x: auto
+    padding: 6px;
+    margin: 0 0 20px;
+    overflow: visible;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 15px
 }
 
 .tabs button {
     font: inherit;
     font-weight: 600;
-    padding: 8px 16px;
-    border-radius: 99px;
-    border: 1px solid var(--line);
-    background: var(--surface);
+    padding: 9px 8px;
+    min-width: 0;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    background: transparent;
     color: var(--ink);
     cursor: pointer;
-    transition: color .18s ease, background-color .18s ease, border-color .18s ease, transform .18s ease
+    transition: color .18s ease, background-color .18s ease, border-color .18s ease, transform .18s ease;
+    text-align: center
 }
 
 .tabs button[aria-selected="true"] {
@@ -797,8 +1602,15 @@ details>form {
 }
 
 .tabs button:hover {
-    border-color: var(--soon);
+    background: var(--bg);
+    border-color: var(--line);
     transform: translateY(-1px)
+}
+
+@media (max-width:380px) {
+    .tabs {
+        grid-template-columns: repeat(2, minmax(0, 1fr))
+    }
 }
 
 button:active {

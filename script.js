@@ -365,6 +365,13 @@
         store("duesoon.tab", n);
     }
     tabs.forEach(function (b) { b.addEventListener("click", function () { goTab(b.dataset.tab); }); });
+    document.querySelectorAll("#tools details").forEach(function (section) {
+        section.addEventListener("click", function (e) {
+            var target = e.target;
+            if (target.closest("summary, button, input, select, textarea, a, form, label, [data-k]")) return;
+            section.open = !section.open;
+        });
+    });
     goTab(RO ? "tasks" : (store("duesoon.tab") || "tasks"));
 
     // toast

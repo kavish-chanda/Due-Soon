@@ -1756,3 +1756,476 @@ li:nth-child(5) {
         transition: none !important
     }
 }
+
+/* ===== Study Lab ===== */
+.lab {
+    --a: hsl(var(--h, 220) 85% 58%);
+    --a2: hsl(var(--h, 220) 85% 94%);
+    margin-bottom: 30px
+}
+
+:root[data-theme="dark"] .lab,
+:root[data-theme="midnight"] .lab,
+:root[data-theme="forest"] .lab,
+:root[data-theme="sunset"] .lab,
+:root[data-theme="red"] .lab {
+    --a2: hsl(var(--h, 220) 40% 20%)
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme]) .lab {
+        --a2: hsl(var(--h, 220) 40% 20%)
+    }
+}
+
+.lab-hero {
+    background: var(--a2);
+    border: 2px solid var(--ink);
+    border-radius: 22px;
+    padding: 22px;
+    box-shadow: 0 5px 0 var(--ink);
+    margin-bottom: 18px
+}
+
+.lab-eyebrow {
+    font-size: .72rem;
+    font-weight: 800;
+    letter-spacing: .14em;
+    color: var(--muted);
+    margin: 0 0 6px
+}
+
+.lab-hero h2 {
+    display: block;
+    font-size: 1.8rem;
+    letter-spacing: -.02em;
+    margin: 0 0 6px
+}
+
+.lab-sub {
+    color: var(--muted);
+    margin: 0 0 14px
+}
+
+.lab-search {
+    display: flex;
+    gap: 8px;
+    padding: 0;
+    margin: 0;
+    background: none;
+    border: 0
+}
+
+.lab-search input {
+    flex: 1;
+    font-size: 1.05rem;
+    padding: 13px 14px;
+    border: 2px solid var(--ink);
+    border-radius: 14px
+}
+
+.lab-go,
+.lab-main {
+    font: inherit;
+    font-weight: 800;
+    color: #fff;
+    background: var(--a);
+    border: 2px solid var(--ink);
+    border-radius: 14px;
+    padding: 12px 20px;
+    cursor: pointer;
+    box-shadow: 0 4px 0 var(--ink);
+    transition: transform .1s, box-shadow .1s
+}
+
+.lab-go:active,
+.lab-main:active,
+.lab-btn:active,
+.lab-opt:active,
+.lab-chip:active {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 var(--ink)
+}
+
+.lab-label {
+    font-size: .85rem;
+    font-weight: 700;
+    color: var(--muted);
+    margin: 16px 0 8px
+}
+
+.lab-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px
+}
+
+.lab-chip {
+    font: inherit;
+    font-weight: 600;
+    color: var(--ink);
+    background: var(--surface);
+    border: 2px solid var(--ink);
+    border-radius: 99px;
+    padding: 8px 16px;
+    cursor: pointer;
+    box-shadow: 0 3px 0 var(--ink);
+    text-align: left;
+    transition: transform .1s, box-shadow .1s
+}
+
+.lab-chip small {
+    display: block;
+    font-weight: 400;
+    font-size: .7rem;
+    color: var(--muted)
+}
+
+.lab-chip:hover {
+    background: var(--a2)
+}
+
+.lab-err {
+    background: var(--surface);
+    border: 2px dashed var(--late);
+    color: var(--ink);
+    border-radius: 14px;
+    padding: 12px;
+    margin-top: 12px
+}
+
+.lab-load {
+    text-align: center;
+    padding: 50px 0
+}
+
+.lab-spin {
+    width: 42px;
+    height: 42px;
+    margin: 0 auto 12px;
+    border: 5px solid var(--line);
+    border-top-color: var(--a);
+    border-radius: 50%;
+    animation: labspin .8s linear infinite
+}
+
+@keyframes labspin {
+    to {
+        transform: rotate(360deg)
+    }
+}
+
+.lab-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 12px
+}
+
+.lab-title {
+    margin: 0;
+    font-size: 1.5rem;
+    letter-spacing: -.02em;
+    display: block
+}
+
+.lab-star {
+    color: #f5b800
+}
+
+.lab-back,
+.lab-btn {
+    font: inherit;
+    font-weight: 700;
+    color: var(--ink);
+    background: var(--surface);
+    border: 2px solid var(--ink);
+    border-radius: 12px;
+    padding: 8px 14px;
+    cursor: pointer;
+    box-shadow: 0 3px 0 var(--ink);
+    transition: transform .1s, box-shadow .1s
+}
+
+.lab-btn:disabled {
+    opacity: .4;
+    cursor: default
+}
+
+.lab-btn.lab-on {
+    background: var(--a2)
+}
+
+.lab-path {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 10px
+}
+
+.lab-path button {
+    font: inherit;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-align: left;
+    color: var(--ink);
+    background: var(--surface);
+    border: 2px solid var(--line);
+    border-radius: 14px;
+    padding: 8px 10px;
+    cursor: pointer
+}
+
+.lab-path b {
+    flex: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--line);
+    font-size: .85rem
+}
+
+.lab-path span {
+    font-weight: 700;
+    line-height: 1.1
+}
+
+.lab-path small {
+    display: block;
+    font-weight: 400;
+    font-size: .68rem;
+    color: var(--muted)
+}
+
+.lab-path button[aria-selected="true"] {
+    border-color: var(--ink);
+    background: var(--a2);
+    box-shadow: 0 3px 0 var(--ink)
+}
+
+.lab-path button[aria-selected="true"] b {
+    background: var(--a);
+    color: #fff
+}
+
+.lab-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 14px;
+    font-size: .85rem;
+    margin-bottom: 14px
+}
+
+.lab-links a {
+    color: var(--soon);
+    font-weight: 600
+}
+
+.lab-stage {
+    animation: labin .3s ease
+}
+
+@keyframes labin {
+    from {
+        opacity: 0;
+        transform: translateX(14px)
+    }
+
+    to {
+        opacity: 1;
+        transform: none
+    }
+}
+
+.lab-card {
+    background: var(--surface);
+    border: 2px solid var(--ink);
+    border-radius: 22px;
+    padding: 20px;
+    box-shadow: 0 5px 0 var(--ink);
+    margin-bottom: 14px
+}
+
+.lab-card h3 {
+    font-size: 1.35rem;
+    margin: 0 0 10px;
+    letter-spacing: -.01em
+}
+
+.lab-card p {
+    margin: 0 0 10px
+}
+
+.lab-key {
+    font-weight: 600;
+    border-left: 5px solid var(--a);
+    padding-left: 12px
+}
+
+.lab-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin: 14px 0;
+    color: var(--muted)
+}
+
+.lab-flip {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    min-height: 190px;
+    padding: 20px;
+    font: inherit;
+    text-align: center;
+    color: var(--ink);
+    background: var(--surface);
+    border: 2px solid var(--ink);
+    border-radius: 22px;
+    box-shadow: 0 5px 0 var(--ink);
+    cursor: pointer
+}
+
+.lab-flip.on {
+    background: var(--a2)
+}
+
+.lab-term {
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -.02em
+}
+
+.lab-def {
+    font-size: 1.05rem;
+    font-weight: 600
+}
+
+.lab-def mark {
+    background: var(--today);
+    color: #1b2440;
+    border-radius: 4px;
+    padding: 0 3px
+}
+
+.lab-bar {
+    height: 10px;
+    border-radius: 99px;
+    background: var(--line);
+    overflow: hidden;
+    margin-bottom: 12px
+}
+
+.lab-bar i {
+    display: block;
+    height: 100%;
+    background: var(--a);
+    transition: width .3s
+}
+
+.lab-opts {
+    display: grid;
+    gap: 8px;
+    margin: 14px 0
+}
+
+.lab-opt {
+    font: inherit;
+    font-weight: 600;
+    text-align: left;
+    color: var(--ink);
+    background: var(--bg);
+    border: 2px solid var(--ink);
+    border-radius: 14px;
+    padding: 12px 14px;
+    cursor: pointer;
+    box-shadow: 0 3px 0 var(--ink);
+    transition: transform .1s, box-shadow .1s
+}
+
+.lab-opt:hover:not(:disabled) {
+    background: var(--a2)
+}
+
+.lab-opt.right {
+    background: #2fb26a;
+    color: #fff;
+    animation: labpop .3s
+}
+
+.lab-opt.wrong {
+    background: var(--late);
+    color: #fff
+}
+
+.lab-opt:disabled {
+    cursor: default
+}
+
+@keyframes labpop {
+    50% {
+        transform: scale(1.03)
+    }
+}
+
+.lab-why {
+    background: var(--a2);
+    border-radius: 12px;
+    padding: 10px 12px
+}
+
+.lab-result {
+    text-align: center
+}
+
+.lab-result .lab-miss {
+    text-align: left;
+    background: var(--bg);
+    border-radius: 12px;
+    padding: 10px 12px;
+    margin-bottom: 8px
+}
+
+.lab-ring {
+    --p: 0;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    margin: 0 auto 12px;
+    display: grid;
+    place-items: center;
+    background: conic-gradient(var(--a) calc(var(--p)*1%), var(--line) 0)
+}
+
+.lab-ring b {
+    display: grid;
+    place-items: center;
+    width: 92px;
+    height: 92px;
+    border-radius: 50%;
+    background: var(--surface);
+    font-size: 1.6rem
+}
+
+.lab-result.pass .lab-ring {
+    animation: labpop .6s
+}
+
+@media (max-width:480px) {
+    .lab-path small {
+        display: none
+    }
+
+    .lab-hero h2 {
+        font-size: 1.45rem
+    }
+
+    .lab-search {
+        flex-direction: column
+    }
+}

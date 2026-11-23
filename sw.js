@@ -1,5 +1,5 @@
-const C = "duesoon-v8";
-const A = ["./", "index.html", "style.css", "script.js", "icon-192.png", "icon-512.png", "manifest.webmanifest"];
+const C = "duesoon-v9";
+const A = ["./", "index.html", "style.css", "script.js", "study.js", "icon-192.png", "icon-512.png", "manifest.webmanifest"];
 self.addEventListener("install", e => { e.waitUntil(caches.open(C).then(c => c.addAll(A))); self.skipWaiting(); });
 self.addEventListener("activate", e => { e.waitUntil(caches.keys().then(k => Promise.all(k.filter(x => x !== C).map(x => caches.delete(x))))); });
 self.addEventListener("fetch", e => { if (e.request.method !== "GET") return; e.respondWith(caches.match(e.request).then(r => r || fetch(e.request))); });

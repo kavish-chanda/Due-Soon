@@ -108,7 +108,7 @@
 
     /* ---------- state + rendering ---------- */
     var S = { view: "home", topic: "", L: null, tab: "learn", i: 0, flip: false, known: {}, quiz: null, err: "" };
-    var SUGGEST = ["Pythagorean theorem", "Photosynthesis", "World War I", "Cell (biology)", "Quadratic equation", "Solar System"];
+    var SUGGEST = ["AMC", "Science Olympiad", "SAT", "Photosynthesis", "Pythagorean theorem", "World War I"];
 
     function testTopics() {
         var items = jget("duesoon.items", []), out = [];
@@ -128,8 +128,8 @@
     function home() {
         var best = jget("duesoon.lab", { best: {} }).best, done = Object.keys(best).filter(function (k) { return best[k] >= 80; }).length;
         return '<div class="lab-hero"><p class="lab-eyebrow">STUDY LAB</p><h2>What are you studying?</h2>' +
-            '<p class="lab-sub">Type any topic. You get a short lesson, key-term cards, and a quiz built from the article.</p>' +
-            '<form id="labf" class="lab-search"><input id="labq" required maxlength="80" placeholder="Pythagorean theorem, photosynthesis, causes of WWI" aria-label="Topic" autocomplete="off"><button class="lab-go" type="submit">Start</button></form>' +
+            '<p class="lab-sub">Type a topic like photosynthesis for a lesson and quiz. Type a test like AMC or Science Olympiad and I will ask which year and event, then build your study kit.</p>' +
+            '<form id="labf" class="lab-search"><input id="labq" required maxlength="80" placeholder="AMC, Science Olympiad, photosynthesis, SAT…" aria-label="Topic" autocomplete="off"><button class="lab-go" type="submit">Start</button></form>' +
             (S.err ? '<div class="lab-err" role="alert">' + esc(S.err) + '</div>' : "") + '</div>' +
             chips(testTopics(), "From your upcoming tests") +
             chips(jget("duesoon.lab.recent", []).map(function (r) { return { t: r.t }; }), "Recent") +
@@ -195,13 +195,127 @@
         root.style.setProperty("--h", S.L ? hue(S.L.title) : 220);
         if (S.view === "home") root.innerHTML = home();
         else if (S.view === "loading") root.innerHTML = loading();
+        else if (S.view === "guide") root.innerHTML = guideHtml();
         else root.innerHTML = header() + '<div class="lab-stage">' + (S.tab === "learn" ? learn() : S.tab === "terms" ? terms() : quiz()) + '</div>';
+    }
+
+    /* ---------- guided test finder: asks follow-up questions, then builds a study kit ---------- */
+    var YEARS = ["2025", "2024", "2023", "2022", "2021", "2020", "2019", "2018", "Older"];
+    var SO_EVENTS = ["Anatomy and Physiology", "Astronomy", "Botany", "Circuit Lab", "Codebusters", "Disease Detectives", "Dynamic Planet", "Entomology", "Experimental Design", "Forensics", "Fossils", "Remote Sensing", "Scrambler", "Water Quality"];
+    function slug(t) { return encodeURIComponent(t.replace(/ /g, "_")); }
+    function gsearch(q) { return "https://www.google.com/search?q=" + encodeURIComponent(q); }
+    var AOPS = "https://artofproblemsolving.com/wiki/index.php/";
+    var PATHS = [
+        {
+            re: /\b(amc|aime)\b/i, name: "AMC / AIME", steps: [
+                { key: "c", q: "Which contest are you preparing for?", opts: ["AMC 8", "AMC 10A", "AMC 10B", "AMC 12A", "AMC 12B", "AIME I", "AIME II"] },
+                { key: "y", q: "Which year's test do you want?", opts: YEARS }],
+            kit: function (a) {
+                var f = a.c.replace(/ /g, "_"), fam = a.c.indexOf("AMC 8") === 0 ? "AMC_8" : a.c.indexOf("AMC 10") === 0 ? "AMC_10" : a.c.indexOf("AMC 12") === 0 ? "AMC_12" : "AIME", cards = [];
+                if (a.y === "Older") cards.push({ t: "Browse every past " + fam.replace("_", " ") + " test", d: "All years, with problems and solutions.", href: AOPS + fam + "_Problems_and_Solutions" });
+                else cards.push({ t: a.y + " " + a.c + " problems", d: "Open the test. In your browser use Print, then Save as PDF to keep a copy.", href: AOPS + a.y + "_" + f + "_Problems" },
+                    { t: "Answer key", d: "Check your answers after you finish.", href: AOPS + a.y + "_" + f + "_Answer_Key" });
+                cards.push({ t: "Official competition info", d: "Dates, registration, and rules from the MAA.", href: "https://maa.org/math-competitions" });
+                var time = fam === "AMC_8" ? "25 questions in 40 minutes" : fam === "AIME" ? "15 questions in 3 hours" : "25 questions in 75 minutes";
+                return { cards: cards, tip: "Real format: " + time + ". Try it timed, then review every miss.", topics: ["Number theory", "Combinatorics", "Geometry", "Algebra", "Probability"] };
+            }
+        },
+        {
+            re: /science olympiad|scioly/i, name: "Science Olympiad", steps: [
+                { key: "y", q: "Which season?", opts: ["2026\u201327", "2025\u201326", "2024\u201325", "2023\u201324", "Older"] },
+                { key: "d", q: "Which division?", opts: ["Division B (middle school)", "Division C (high school)"] },
+                { key: "e", q: "Which event?", opts: SO_EVENTS, free: "Other event" }],
+            kit: function (a) {
+                return {
+                    cards: [
+                        { t: a.e + " on the Scioly wiki", d: "Event overview, study resources, and tips.", href: "https://scioly.org/wiki/index.php/" + slug(a.e) },
+                        { t: "Test Exchange", d: "Past tests and keys. Filter by event, then pick the " + a.y + " season or the closest one.", href: "https://scioly.org/tests/" },
+                        { t: "Official rules", d: "Rules manuals are on the Science Olympiad site. Events and rules change each season.", href: "https://www.soinc.org/" }],
+                    tip: "Events differ between " + a.d.split(" (")[0] + " and the other division, so check that this event is on your division's list.", lesson: a.e
+                };
+            }
+        },
+        {
+            re: /^(the )?sat( test| prep| practice)?$/i, name: "SAT", steps: [{ key: "s", q: "What do you want to practice?", opts: ["Math", "Reading and Writing", "Full practice test"] }],
+            kit: function (a) {
+                return {
+                    cards: [
+                        { t: "Official SAT practice", d: "Free practice from College Board.", href: "https://satsuite.collegeboard.org/" },
+                        { t: "Khan Academy SAT", d: "Free lessons and practice sorted by skill.", href: "https://www.khanacademy.org/test-prep/sat" },
+                        { t: "Search: SAT " + a.s + " practice PDFs", d: "Printable practice from the web.", href: gsearch("SAT " + a.s + " practice test pdf") }],
+                    tip: "Take full tests timed, then study every miss.", topics: a.s === "Math" ? ["Algebra", "Geometry", "Trigonometry"] : ["Grammar", "Reading comprehension"]
+                };
+            }
+        },
+        {
+            re: /^(the )?act( test| prep| practice)?$/i, name: "ACT", steps: [{ key: "s", q: "Which section?", opts: ["English", "Math", "Reading", "Science", "Full practice test"] }],
+            kit: function (a) {
+                return {
+                    cards: [
+                        { t: "Official ACT site", d: "Test info and official preparation.", href: "https://www.act.org/" },
+                        { t: "Search: ACT " + a.s + " practice PDFs", d: "Printable practice from the web.", href: gsearch("ACT " + a.s + " practice test pdf") }],
+                    tip: "Practice under the real time limit, then review every miss."
+                };
+            }
+        },
+        {
+            re: /^ap\b|\bap (exam|test)\b/i, name: "AP exam", steps: [
+                { key: "s", q: "Which AP subject?", opts: ["Calculus AB", "Biology", "Chemistry", "Physics 1", "US History", "Computer Science A"], free: "Other AP subject" },
+                { key: "y", q: "Which year's questions?", opts: ["2025", "2024", "2023", "2022", "Older"] }],
+            kit: function (a) {
+                return {
+                    cards: [
+                        { t: "AP Central", d: "Course descriptions and exam info from College Board.", href: "https://apcentral.collegeboard.org/" },
+                        { t: "Search: AP " + a.s + " " + a.y + " free-response PDFs", d: "Past free-response questions and scoring guides.", href: gsearch("AP " + a.s + " " + (a.y === "Older" ? "" : a.y + " ") + "free response questions pdf") }],
+                    tip: "Do the free-response questions timed, then grade yourself with the scoring guide.", lesson: a.s
+                };
+            }
+        }
+    ];
+    function matchPath(t) { for (var i = 0; i < PATHS.length; i++) if (PATHS[i].re.test(t.trim())) return PATHS[i]; return null; }
+    function startGuide(p, topic) {
+        S.view = "guide"; S.L = null; S.G = { p: p, a: {}, n: 0 };
+        var low = topic.toLowerCase();
+        while (S.G.n < p.steps.length) {
+            var st = p.steps[S.G.n], hit = st.opts.filter(function (o) { return low.indexOf(o.toLowerCase()) > -1; }).sort(function (x, y) { return y.length - x.length; })[0];
+            if (!hit) break; S.G.a[st.key] = hit; S.G.n++;
+        }
+        render();
+    }
+    function gpick(v) { var G = S.G; if (!v || G.n >= G.p.steps.length) return; G.a[G.p.steps[G.n].key] = v; G.n++; render(); }
+    function bub(t) { return '<div class="lab-bub">' + esc(t) + '</div>'; }
+    function guideHtml() {
+        var G = S.G, p = G.p, h = '<div class="lab-top"><button type="button" class="lab-back" data-act="home">\u2190 Topics</button><h2 class="lab-title">' + esc(p.name) + '</h2></div><div class="lab-chat">';
+        p.steps.forEach(function (s, i) {
+            if (i > G.n) return;
+            h += bub(s.q);
+            if (i < G.n) h += '<button type="button" class="lab-me" data-act="gback" data-n="' + i + '">' + esc(G.a[s.key]) + ' <small>change</small></button>';
+            else {
+                h += '<div class="lab-chips">' + s.opts.map(function (o) { return '<button type="button" class="lab-chip" data-act="gpick" data-v="' + at(o) + '">' + esc(o) + '</button>'; }).join("") + '</div>';
+                if (s.free) h += '<form class="lab-free" data-gfree><input id="gfree" maxlength="60" placeholder="' + at(s.free) + '" required><button class="lab-btn" type="submit">Use this</button></form>';
+            }
+        });
+        if (G.n >= p.steps.length) h += kitHtml(p.kit(G.a));
+        return h + "</div>";
+    }
+    function kitHtml(k) {
+        var h = bub("Here is your study kit.") + '<div class="lab-kit">' + k.cards.map(function (c) {
+            return '<a class="lab-kc" href="' + at(c.href) + '" target="_blank" rel="noopener"><b>' + esc(c.t) + '</b><span>' + esc(c.d) + '</span><i>Open \u2197</i></a>';
+        }).join("") + '</div>';
+        if (k.tip) h += '<p class="lab-tip">' + esc(k.tip) + '</p>';
+        if (k.lesson || k.topics) {
+            h += '<p class="lab-label">Learn it here first</p>';
+            if (k.lesson) h += '<form class="lab-free" data-glesson><input id="glesson" value="' + at(k.lesson) + '" maxlength="80" aria-label="Lesson topic"><button class="lab-main" type="submit">Build lesson</button></form>';
+            if (k.topics) h += '<div class="lab-chips">' + k.topics.map(function (t) { return '<button type="button" class="lab-chip" data-act="go" data-topic="' + at(t) + '">' + esc(t) + '</button>'; }).join("") + '</div>';
+        }
+        return h;
     }
 
     /* ---------- actions ---------- */
     var req = 0;
-    function go(topic) {
+    function go(topic, force) {
         topic = topic.trim(); if (!topic) return;
+        var gp = force ? null : matchPath(topic); if (gp) { startGuide(gp, topic); return; }
         var my = ++req; S.view = "loading"; S.topic = topic; S.err = ""; render();
         loadArticle(topic).then(function (a) {
             if (my !== req) return;
@@ -230,11 +344,15 @@
 
     root.addEventListener("submit", function (e) {
         if (e.target.id === "labf") { e.preventDefault(); go(document.getElementById("labq").value); }
+        else if (e.target.hasAttribute("data-gfree")) { e.preventDefault(); gpick(document.getElementById("gfree").value.trim()); }
+        else if (e.target.hasAttribute("data-glesson")) { e.preventDefault(); go(document.getElementById("glesson").value, true); }
     });
     root.addEventListener("click", function (e) {
         var b = e.target.closest("[data-act]"); if (!b) return;
         var a = b.dataset.act, L = S.L;
         if (a === "go") go(b.dataset.topic);
+        else if (a === "gpick") gpick(b.dataset.v);
+        else if (a === "gback") { S.G.n = +b.dataset.n; render(); }
         else if (a === "home") { req++; S.view = "home"; S.L = null; S.err = ""; render(); }
         else if (a === "tab") setTab(b.dataset.tab);
         else if (a === "prev") { S.i = Math.max(0, S.i - 1); S.flip = false; render(); }

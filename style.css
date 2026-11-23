@@ -2229,3 +2229,333 @@ li:nth-child(5) {
         flex-direction: column
     }
 }
+
+/* ===== New look: Sticker Planner (paper, ink outlines, highlighter, bottom dock) ===== */
+:root {
+    --bg: #fbf6ea;
+    --surface: #fffdf7;
+    --ink: #1a1a1a;
+    --muted: #6b6558;
+    --line: #ddd3bb;
+    --soon: #2f5bff;
+    --late: #e8452c;
+    --today: #ffd23f;
+    --done: #a79f8c
+}
+
+body {
+    font-family: "Space Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+    background-image: radial-gradient(var(--line) 1.2px, transparent 1.2px);
+    background-size: 22px 22px
+}
+
+body #bg {
+    display: none
+}
+
+body main {
+    max-width: 700px;
+    padding: 26px 16px 130px
+}
+
+body .top h1 {
+    font-size: 2.7rem;
+    font-weight: 700;
+    letter-spacing: -.045em;
+    display: inline;
+    background: linear-gradient(transparent 60%, var(--today) 60%);
+    padding: 0 6px;
+    margin-left: -6px
+}
+
+body .top {
+    display: block
+}
+
+body .top img {
+    display: inline-block;
+    vertical-align: middle;
+    border-radius: 14px;
+    border: 2px solid var(--ink);
+    box-shadow: 0 3px 0 var(--ink);
+    margin-right: 10px;
+    width: 46px;
+    height: 46px;
+    transform: rotate(-6deg)
+}
+
+body .sub {
+    font-weight: 500;
+    margin: 6px 0 14px
+}
+
+body nav.tabs {
+    position: fixed;
+    left: 50%;
+    bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+    transform: translateX(-50%);
+    display: flex;
+    gap: 4px;
+    margin: 0;
+    padding: 5px;
+    background: var(--surface);
+    border: 2px solid var(--ink);
+    border-radius: 99px;
+    box-shadow: 0 4px 0 var(--ink);
+    z-index: 40;
+    overflow: visible;
+    max-width: calc(100% - 20px)
+}
+
+body nav.tabs button {
+    font: inherit;
+    font-weight: 700;
+    border: 0;
+    background: none;
+    color: var(--ink);
+    border-radius: 99px;
+    padding: 10px 18px;
+    box-shadow: none;
+    transition: background .15s
+}
+
+body nav.tabs button:hover {
+    transform: none;
+    background: var(--line)
+}
+
+body nav.tabs button[aria-selected="true"] {
+    background: var(--ink);
+    color: var(--bg)
+}
+
+body .wm {
+    top: 10px;
+    right: 12px;
+    bottom: auto;
+    font-weight: 700;
+    letter-spacing: .12em;
+    font-size: .7rem;
+    text-transform: uppercase
+}
+
+body .toast {
+    bottom: calc(84px + env(safe-area-inset-bottom, 0px));
+    border: 2px solid var(--bg);
+    box-shadow: 0 4px 0 rgba(0, 0, 0, .25)
+}
+
+body form#f,
+body details,
+body .banner,
+body li,
+body .lab-hero {
+    border: 2px solid var(--ink);
+    border-radius: 18px;
+    box-shadow: 0 4px 0 var(--ink)
+}
+
+body form#f {
+    background: var(--surface);
+    padding: 16px
+}
+
+body input,
+body select,
+body textarea {
+    background: var(--surface);
+    color: var(--ink);
+    border: 2px solid var(--ink);
+    border-radius: 12px;
+    font-family: inherit
+}
+
+body input:focus-visible,
+body select:focus-visible,
+body textarea:focus-visible {
+    outline: 3px solid var(--soon);
+    outline-offset: 1px
+}
+
+body .add {
+    background: var(--ink);
+    color: var(--bg);
+    border: 2px solid var(--ink);
+    border-radius: 14px;
+    font-weight: 700;
+    box-shadow: 0 4px 0 var(--soon)
+}
+
+body .add:active {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 var(--soon)
+}
+
+body .ghost,
+body .cancel {
+    font-family: inherit;
+    font-weight: 600;
+    background: var(--surface);
+    color: var(--ink);
+    border: 2px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 0 2px 0 var(--ink)
+}
+
+body .banner {
+    background: var(--today);
+    color: #1a1a1a;
+    font-weight: 700
+}
+
+body .banner.late {
+    background: var(--late);
+    color: #fff
+}
+
+body .bar {
+    height: 14px;
+    border: 2px solid var(--ink);
+    background: var(--surface)
+}
+
+body li {
+    background: var(--surface);
+    border-left: 10px solid var(--c, var(--ink));
+    transition: transform .12s
+}
+
+body li:hover {
+    transform: translate(-2px, -2px)
+}
+
+body .days {
+    border: 2px solid var(--ink);
+    border-radius: 10px;
+    transform: rotate(-3deg);
+    background: var(--bg);
+    color: var(--ink)
+}
+
+body .late .days {
+    background: var(--late);
+    color: #fff
+}
+
+body .today .days {
+    background: var(--today);
+    color: #1a1a1a
+}
+
+body details {
+    background: var(--surface)
+}
+
+body summary {
+    font-weight: 700
+}
+
+body h2 {
+    font-weight: 700;
+    letter-spacing: -.02em
+}
+
+body .chip {
+    border: 1.5px solid var(--ink)
+}
+
+/* study guide chat */
+.lab-chat {
+    display: grid;
+    gap: 10px;
+    margin-top: 8px
+}
+
+.lab-bub {
+    justify-self: start;
+    max-width: 88%;
+    background: var(--surface);
+    border: 2px solid var(--ink);
+    border-radius: 18px 18px 18px 4px;
+    padding: 10px 14px;
+    font-weight: 600;
+    box-shadow: 0 3px 0 var(--ink)
+}
+
+.lab-me {
+    justify-self: end;
+    font: inherit;
+    font-weight: 700;
+    color: #fff;
+    background: var(--a);
+    border: 2px solid var(--ink);
+    border-radius: 18px 18px 4px 18px;
+    padding: 9px 14px;
+    cursor: pointer;
+    box-shadow: 0 3px 0 var(--ink)
+}
+
+.lab-me small {
+    font-weight: 500;
+    opacity: .8;
+    margin-left: 6px
+}
+
+.lab-free {
+    display: flex;
+    gap: 8px;
+    padding: 0;
+    margin: 4px 0 0;
+    background: none;
+    border: 0;
+    box-shadow: none
+}
+
+.lab-free input {
+    flex: 1
+}
+
+.lab-kit {
+    display: grid;
+    gap: 10px
+}
+
+.lab-kc {
+    display: grid;
+    gap: 2px;
+    text-decoration: none;
+    color: var(--ink);
+    background: var(--surface);
+    border: 2px solid var(--ink);
+    border-radius: 16px;
+    padding: 12px 14px;
+    box-shadow: 0 4px 0 var(--ink);
+    transition: transform .1s
+}
+
+.lab-kc:hover {
+    transform: translate(-2px, -2px);
+    background: var(--a2)
+}
+
+.lab-kc span {
+    color: var(--muted);
+    font-size: .9rem
+}
+
+.lab-kc i {
+    font-style: normal;
+    font-weight: 700;
+    color: var(--soon);
+    font-size: .85rem
+}
+
+.lab-tip {
+    background: var(--today);
+    color: #1a1a1a;
+    border: 2px solid var(--ink);
+    border-radius: 12px;
+    padding: 10px 12px;
+    font-weight: 600;
+    margin: 4px 0
+}
